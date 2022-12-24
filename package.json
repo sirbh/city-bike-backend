@@ -20,8 +20,7 @@
     "express": "^4.18.2",
     "pg": "^8.8.0",
     "pg-hstore": "^2.3.4",
-    "rimraf": "^3.0.2",
-    "sequelize": "^6.28.0"
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "concurrently": "^7.6.0",
