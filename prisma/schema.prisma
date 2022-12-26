@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model journey {
+  id                     Int      @id @default(autoincrement())
+  departure              DateTime @db.Timestamp(6)
+  return                 DateTime @db.Timestamp(6)
+  departure_station_id   Int
+  departure_station_name String   @db.VarChar
+  return_station_id      Int
+  return_station_name    String   @db.VarChar
+  covered_distance       Float?
+  duration               Int
+}
+
+model stationDetails {
+  id         Int     @id
+  station_id Int
+  nimi       String  @db.VarChar
+  namn       String  @db.VarChar
+  name       String  @db.VarChar
+  osoite     String  @db.VarChar
+  adress     String  @db.VarChar
+  kaupunki   String? @db.VarChar
+  stad       String? @db.VarChar
+  operaattor String? @db.VarChar
+  Kapasiteet String  @db.VarChar
+  x          Float
+  y          Float
+}
