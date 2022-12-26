@@ -54,55 +54,55 @@ const headers = [
 const fileContent = fs.readFileSync(csvFilePath, { encoding: "utf-8" });
 const fileContent2 = fs.readFileSync(csvFilePath2, { encoding: "utf-8" });
 
-// parse(
-//   fileContent,
-//   {
-//     delimiter: ",",
-//     columns: headers,
-//     from: 2,
-//     cast: (cv, context) => {
-//       if (context.column === "FID" || context.column === "ID") {
-//         return parseInt(cv);
-//       }
-//       if (context.column === "x" || context.column === "y") {
-//         return parseFloat(cv);
-//       }
-//       return cv.trim() ? cv : undefined;
-//     },
-//   },
-//   async (error, result: stationDetail[]) => {
-//     if (error) {
-//       console.error(error);
-//     }
-//     console.log("here", result);
-//     result.forEach(async (record) => {
-//       await db.stationDetails.create({
-//         data: {
-//           adress: record.Adress,
-//           id: record.FID,
-//           Kapasiteet: record.Kapasiteet,
-//           name: record.Name,
-//           namn: record.Namn,
-//           nimi: record.Nimi,
-//           osoite: record.Osoite,
-//           station_id: record.ID,
-//           x: record.x,
-//           y: record.y,
-//           kaupunki: record.Kaupunki,
-//           operaattor: record.Operaattor,
-//           stad: record.Stad,
-//         },
-//       });
-//     });
-//   }
-// );
-
 parse(
-  fileContent2,
+  fileContent,
   {
     delimiter: ",",
+    columns: headers,
     from: 2,
+    cast: (cv, context) => {
+      if (context.column === "FID" || context.column === "ID") {
+        return parseInt(cv);
+      }
+      if (context.column === "x" || context.column === "y") {
+        return parseFloat(cv);
+      }
+      return cv.trim() ? cv : undefined;
+    },
   },
+  async (error, result: stationDetail[]) => {
+    if (error) {
+      console.error(error);
+    }
+    console.log("here", result);
+    result.forEach(async (record) => {
+      await db.stationDetails.create({
+        data: {
+          adress: record.Adress,
+          id: record.FID,
+          Kapasiteet: record.Kapasiteet,
+          name: record.Name,
+          namn: record.Namn,
+          nimi: record.Nimi,
+          osoite: record.Osoite,
+          station_id: record.ID,
+          x: record.x,
+          y: record.y,
+          kaupunki: record.Kaupunki,
+          operaattor: record.Operaattor,
+          stad: record.Stad,
+        },
+      });
+    });
+  }
+);
+
+// parse(
+//   fileContent2,
+//   {
+//     delimiter: ",",
+//     from: 2,
+//   },
 //   async (error, result:journey[]) => {
 //     if (error) {
 //       console.error(error);
@@ -121,24 +121,24 @@ parse(
 //        }})
 //     })
 //   }
-).on('readable', async function(this:Parser){
-     let count = 0
-     while(count<=103){
-        const record = this.read()
-        await db.journey.create({
-          data:{
-           departure:new Date(record[0]),
-           return:new Date(record[1]),
-           departure_station_id:parseInt(record[2]),
-           departure_station_name:record[3],
-           return_station_id:parseInt(record[4]),
-           return_station_name:record[5],
-           covered_distance:parseFloat(record[6]),
-           duration:parseInt(record[7]) 
-          }
-        })
-        count++
-     }
+// ).on('readable', async function(this:Parser){
+//      let count = 0
+//      while(count<=103){
+//         const record = this.read()
+//         await db.journey.create({
+//           data:{
+//            departure:new Date(record[0]),
+//            return:new Date(record[1]),
+//            departure_station_id:parseInt(record[2]),
+//            departure_station_name:record[3],
+//            return_station_id:parseInt(record[4]),
+//            return_station_name:record[5],
+//            covered_distance:parseFloat(record[6]),
+//            duration:parseInt(record[7]) 
+//           }
+//         })
+//         count++
+//      }
     
-  })
+//   })
 
