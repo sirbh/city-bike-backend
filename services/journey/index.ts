@@ -1,4 +1,5 @@
 import db from '../../utils/database'
+import { searchStation } from '../station'
 
 type IQuery = {
     page:string,
@@ -9,6 +10,7 @@ type IQuery = {
 
 const SORTABLE_COLUMNS = ['departure_station_name','return_station_name','covered_distance','duration']
 const ORDER = ['asc','desc']
+const SEARCHABLE_COLUMNS = ['departure_station_name','return_station_name']
 
 const getJourney = async({page,order,sortBy,totalRecords}:IQuery)=>{
     
@@ -47,4 +49,26 @@ const getJourney = async({page,order,sortBy,totalRecords}:IQuery)=>{
     return journey
 }
 
-export {getJourney,IQuery}
+const getJourneyByStation = async(stationName:string,journeyType:string)=>{
+    const _serachQuery:{
+        [key:string]:string
+    } = {}
+    if(journeyType==='return'){
+        _serachQuery['return_station_name']=stationName  
+    }
+    else if(journeyType==='departure'){
+        _serachQuery['departure_station_name']=stationName 
+    }
+    else {
+        throw {
+            message:'INVALID REQUEST'
+        }
+    }
+    const journey = db.journey.findMany({
+        where:_serachQuery
+    })
+
+    return journey
+}
+
+export {getJourney,IQuery,getJourneyByStation}

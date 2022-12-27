@@ -17,4 +17,16 @@ const searchStation = async (searchQuery: string) => {
   return stationsDetails;
 };
 
-export { searchStation };
+const getStationDetails = async(stationName:string)=>{
+  
+
+  const station = db.stationDetails.findMany({
+      where:{
+        name:stationName
+      }
+  })
+
+  return station
+}
+
+export { searchStation, getStationDetails};
