@@ -20,7 +20,7 @@ const searchStation = async (searchQuery: string) => {
 const getStationDetails = async(stationName:string)=>{
   
 
-  const station = db.stationDetails.findMany({
+  const station = await db.stationDetails.findMany({
       where:{
         name:stationName
       }
@@ -29,4 +29,25 @@ const getStationDetails = async(stationName:string)=>{
   return station
 }
 
-export { searchStation, getStationDetails};
+const getStationList = async (page:string,totalRecords:string)=>{
+
+  const _page = parseInt(page)
+  const _totalRecords = parseInt(totalRecords)
+
+  const stations = await db.$transaction([
+    db.stationDetails.count(),
+    db.stationDetails.findMany({
+      take: _totalRecords,
+      skip: (_page - 1) * _totalRecords,
+    }),
+  ]);
+
+
+  return {
+    totalRecords:stations[0],
+    journey:stations[1]
+  }
+
+}
+
+export { searchStation, getStationDetails, getStationList};
