@@ -48,13 +48,6 @@ const getJourney = async ({ page, order, sortBy, totalRecords }: IQuery) => {
     }),
   ]);
 
-  console.log(journeyData);
-
-//   const journey = await db.journey.findMany({
-//     take: _totalRecords,
-//     skip: (_page - 1) * _totalRecords,
-//     orderBy: _orderBy,
-//   });
 
   return {
     totalRecords:journeyData[0],
