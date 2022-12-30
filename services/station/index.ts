@@ -81,6 +81,7 @@ const getStationList = async (page: string, totalRecords: string) => {
       select: {
         name: true,
         station_id: true,
+        id:true
       },
     }),
   ]);
