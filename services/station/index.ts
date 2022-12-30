@@ -81,7 +81,7 @@ const getStationList = async (page: string, totalRecords: string) => {
       select: {
         name: true,
         station_id: true,
-        id:true
+        id: true,
       },
     }),
   ]);
@@ -92,4 +92,25 @@ const getStationList = async (page: string, totalRecords: string) => {
   };
 };
 
-export { searchStation, getStationDetails, getStationList };
+const getPopularStations = async (journey_type: string) => {
+  const _journey_type: "departure_station_name" | "return_station_name" =
+    journey_type === "ret"
+      ? "return_station_name"
+      : "departure_station_name";
+  const stations = await db.journey.groupBy({
+    by: [_journey_type],
+    _sum: {
+      covered_distance: true,
+    },
+    orderBy: {
+      _sum: {
+        covered_distance: "desc",
+      },
+    },
+    take: 5,
+  });
+
+  return stations;
+};
+
+export { searchStation, getStationDetails, getStationList, getPopularStations };
