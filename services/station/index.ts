@@ -9,10 +9,10 @@ const searchStation = async (searchQuery: string) => {
         mode: "insensitive",
       },
     },
-    select:{
-      id:true,
-      name:true,
-      station_id:true,
+    select: {
+      id: true,
+      name: true,
+      station_id: true,
     },
     take: 5,
     orderBy: {
@@ -22,78 +22,73 @@ const searchStation = async (searchQuery: string) => {
   return stationsDetails;
 };
 
-const getStationDetails = async(id:string,station_id:string)=>{
-  
-  const _id = parseInt(id)
-  const _station_id = parseInt(station_id)
+const getStationDetails = async (id: string, station_id: string) => {
+  const _id = parseInt(id);
+  const _station_id = parseInt(station_id);
 
   const data = await db.$transaction([
     db.stationDetails.findUniqueOrThrow({
-      where:{
-         id:_id
-      }
-    }),
-    db.journey.count({
-      where:{
-        departure_station_id:_station_id
-      }
-    }),
-    db.journey.count({
-      where:{
-        return_station_id:_station_id
-      }
-    }),
-    db.journey.aggregate({
-      _avg:{
-        covered_distance:true
+      where: {
+        id: _id,
       },
-      where:{
-        departure_station_id:_station_id
+    }),
+    db.journey.count({
+      where: {
+        departure_station_id: _station_id,
+      },
+    }),
+    db.journey.count({
+      where: {
+        return_station_id: _station_id,
       },
     }),
     db.journey.aggregate({
-      _avg:{
-        covered_distance:true
+      _avg: {
+        covered_distance: true,
       },
-      where:{
-        return_station_id:_station_id
+      where: {
+        departure_station_id: _station_id,
       },
     }),
-  ])
+    db.journey.aggregate({
+      _avg: {
+        covered_distance: true,
+      },
+      where: {
+        return_station_id: _station_id,
+      },
+    }),
+  ]);
 
   return {
-    details:data[0],
-    total_departures:data[1],
-    total_return:data[2],
-    avg_departure_distance:data[3]._avg,
-    avg_return_distance:data[4]._avg,
-  }
+    ...data[0],
+    total_departures: data[1],
+    total_return: data[2],
+    avg_departure_distance: data[3]._avg.covered_distance,
+    avg_return_distance: data[4]._avg.covered_distance,
+  };
+};
 
-}
-
-const getStationList = async (page:string,totalRecords:string)=>{
-
-  const _page = parseInt(page)
-  const _totalRecords = parseInt(totalRecords)
+const getStationList = async (page: string, totalRecords: string) => {
+  const _page = parseInt(page);
+  const _totalRecords = parseInt(totalRecords);
 
   const stations = await db.$transaction([
     db.stationDetails.count(),
     db.stationDetails.findMany({
       take: _totalRecords,
       skip: (_page - 1) * _totalRecords,
-      select:{
-        name:true,
-        station_id:true
-      }
+      select: {
+        name: true,
+        station_id: true,
+      },
     }),
   ]);
 
-
   return {
-    totalRecords:stations[0],
-    stations:stations[1]
-  }
+    totalRecords: stations[0],
+    stations: stations[1],
+  };
+};
 
-}
-
-export { searchStation, getStationDetails, getStationList};
+export { searchStation, getStationDetails, getStationList };
