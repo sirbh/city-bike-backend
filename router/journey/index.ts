@@ -9,10 +9,19 @@ const journeyRouter = express.Router();
 journeyRouter.get(
   "/",
   async (req: Request<{}, {}, {}, IQuery>, res: Response) => {
-    const { page, totalRecords, order, sortBy } = req.query;
-    
+    const { page, totalRecords, order, sortBy, journey_type, station_id } =
+      req.query;
+    console.log(req.query)
+
     try {
-      const journey = await getJourney({ page, totalRecords, order, sortBy });
+      const journey = await getJourney({
+        page,
+        totalRecords,
+        order,
+        sortBy,
+        journey_type,
+        station_id,
+      });
       res.contentType("application/json; charset=utf-8");
       res.send(journey);
     } catch (e) {
@@ -20,6 +29,5 @@ journeyRouter.get(
     }
   }
 );
-
 
 export default journeyRouter;

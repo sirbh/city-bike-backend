@@ -36,8 +36,32 @@ station.get(
     const page = req.query.page;
     const totalRecords = req.query.totalRecords;
 
+    console.log(req.query)
+
     try {
       const stations = await getStationList(page,totalRecords);
+      res.contentType("application/json; charset=utf-8");
+      res.send(stations);
+    } catch (e) {
+      res.status(400).send("invalid request");
+    }
+  }
+);
+
+type StationDetailsQuery = {
+  id: string;
+  station_id: string;
+};
+
+station.get(
+  "/station",
+  async (req: Request<{}, {}, {}, StationDetailsQuery>, res: Response) => {
+    const id = req.query.id;
+    const station_id = req.query.station_id;
+
+
+    try {
+      const stations = await getStationDetails(id,station_id);
       res.contentType("application/json; charset=utf-8");
       res.send(stations);
     } catch (e) {
