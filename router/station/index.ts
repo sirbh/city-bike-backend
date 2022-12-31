@@ -12,7 +12,6 @@ type SearchQuery = {
 station.get(
   "/search",
   async (req: Request<{}, {}, {}, SearchQuery>, res: Response) => {
-    console.log("ee");
     const searchQuery = req.query.searchQuery;
 
     try {
@@ -36,7 +35,6 @@ station.get(
     const page = req.query.page;
     const totalRecords = req.query.totalRecords;
 
-    console.log(req.query)
 
     try {
       const stations = await getStationList(page,totalRecords);

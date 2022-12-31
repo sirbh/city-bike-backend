@@ -11,7 +11,6 @@ journeyRouter.get(
   async (req: Request<{}, {}, {}, IQuery>, res: Response) => {
     const { page, totalRecords, order, sortBy, journey_type, station_id } =
       req.query;
-    console.log(req.query)
 
     try {
       const journey = await getJourney({
