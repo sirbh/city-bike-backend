@@ -15,7 +15,7 @@ model journey {
   departure_station_name String   @db.VarChar
   return_station_id      Int
   return_station_name    String   @db.VarChar
-  covered_distance       Float?
+  covered_distance       Float?   
   duration               Int
 }
 
