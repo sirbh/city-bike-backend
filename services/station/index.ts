@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import db from "../../utils/database";
 
 const searchStation = async (searchQuery: string) => {
@@ -21,14 +22,13 @@ const searchStation = async (searchQuery: string) => {
   return stationsDetails;
 };
 
-const getStationDetails = async (id: string, station_id: string) => {
-  const _id = parseInt(id);
+const getStationDetails = async (station_id: string) => {
   const _station_id = parseInt(station_id);
 
   const data = await db.$transaction([
-    db.stationDetails.findUniqueOrThrow({
+    db.stationDetails.findFirstOrThrow({
       where: {
-        id: _id,
+        station_id: _station_id,
       },
     }),
     db.journey.count({
@@ -80,7 +80,6 @@ const getStationList = async (page: string, totalRecords: string) => {
       select: {
         name: true,
         station_id: true,
-        id: true,
       },
     }),
   ]);
@@ -92,12 +91,13 @@ const getStationList = async (page: string, totalRecords: string) => {
 };
 
 const getPopularStations = async (journey_type: string) => {
-  const _journey_type: "departure_station_name" | "return_station_name" =
+  const _journey_type: Prisma.JourneyScalarFieldEnum[] =
     journey_type === "ret"
-      ? "return_station_name"
-      : "departure_station_name";
+      ? ["return_station_name", "return_station_id"]
+      : ["departure_station_name", "departure_station_id"];
   const stations = await db.journey.groupBy({
-    by: [_journey_type],
+    // by: _journey_type,
+    by: _journey_type,
     _sum: {
       covered_distance: true,
     },
@@ -109,7 +109,21 @@ const getPopularStations = async (journey_type: string) => {
     take: 5,
   });
 
-  return stations;
+  return stations.map((station) => {
+    {
+      if (journey_type === "ret") {
+        return {
+          name: station.return_station_name,
+          station_id: station.return_station_id,
+        };
+      } else {
+        return {
+          name: station.departure_station_name,
+          station_id: station.departure_station_id,
+        };
+      }
+    }
+  });
 };
 
 export { searchStation, getStationDetails, getStationList, getPopularStations };

@@ -21,7 +21,7 @@ model journey {
 
 model stationDetails {
   id         Int     @id
-  station_id Int
+  station_id Int     @unique
   nimi       String  @db.VarChar
   namn       String  @db.VarChar
   name       String  @db.VarChar

@@ -2,7 +2,12 @@ import express from "express";
 import type { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
 
-import { searchStation, getStationDetails, getStationList, getPopularStations } from "../../services/station";
+import {
+  searchStation,
+  getStationDetails,
+  getStationList,
+  getPopularStations,
+} from "../../services/station";
 
 const station = express.Router();
 type SearchQuery = {
@@ -35,9 +40,8 @@ station.get(
     const page = req.query.page;
     const totalRecords = req.query.totalRecords;
 
-
     try {
-      const stations = await getStationList(page,totalRecords);
+      const stations = await getStationList(page, totalRecords);
       res.contentType("application/json; charset=utf-8");
       res.send(stations);
     } catch (e) {
@@ -47,14 +51,13 @@ station.get(
 );
 
 type PopularStationQuery = {
-  journey_type:string
+  journey_type: string;
 };
 
 station.get(
   "/popular-station-list",
   async (req: Request<{}, {}, {}, PopularStationQuery>, res: Response) => {
-
-    const journey_type = req.query.journey_type
+    const journey_type = req.query.journey_type;
 
     try {
       const stations = await getPopularStations(journey_type);
@@ -67,19 +70,16 @@ station.get(
 );
 
 type StationDetailsQuery = {
-  id: string;
   station_id: string;
 };
 
 station.get(
   "/station",
   async (req: Request<{}, {}, {}, StationDetailsQuery>, res: Response) => {
-    const id = req.query.id;
     const station_id = req.query.station_id;
 
-
     try {
-      const stations = await getStationDetails(id,station_id);
+      const stations = await getStationDetails(station_id);
       res.contentType("application/json; charset=utf-8");
       res.send(stations);
     } catch (e) {
@@ -87,5 +87,10 @@ station.get(
     }
   }
 );
+
+station.post("/station", (req: Request, res: Response) => {
+  
+});
+
 
 export default station;

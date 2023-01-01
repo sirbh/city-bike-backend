@@ -31,3 +31,6 @@ CREATE TABLE "stationDetails" (
 
     CONSTRAINT "stationDetails_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "stationDetails_station_id_key" ON "stationDetails"("station_id");
