@@ -35,9 +35,11 @@ async function seed() {
           },
         },
         { covered_distance: null },
-        {duration:{
-          lt:10
-        }}
+        {
+          duration: {
+            lt: 10,
+          },
+        },
       ],
     },
   });

@@ -1,14 +1,12 @@
-import { stat } from "fs";
 import db from "../../utils/database";
-import { searchStation } from "../station";
 
 type IQuery = {
   page: string;
   totalRecords: string;
   sortBy?: string;
   order?: "asc" | "desc";
-  station_id?:string;
-  journey_type?:'dep'|'ret'
+  station_id?: string;
+  journey_type?: "dep" | "ret";
 };
 
 const SORTABLE_COLUMNS = [
@@ -20,7 +18,14 @@ const SORTABLE_COLUMNS = [
 const ORDER = ["asc", "desc"];
 const SEARCHABLE_COLUMNS = ["departure_station_name", "return_station_name"];
 
-const getJourney = async ({ page, order, sortBy, totalRecords, station_id,journey_type }: IQuery) => {
+const getJourney = async ({
+  page,
+  order,
+  sortBy,
+  totalRecords,
+  station_id,
+  journey_type,
+}: IQuery) => {
   const _page = parseInt(page);
   const _totalRecords = parseInt(totalRecords);
 
@@ -46,32 +51,30 @@ const getJourney = async ({ page, order, sortBy, totalRecords, station_id,journe
     };
   }
 
-  if(station_id && journey_type){
-    if(journey_type==='dep'){
-      _filterBy['departure_station_id'] = parseInt(station_id)
-    }
-    else {
-      _filterBy['return_station_id'] = parseInt(station_id)
+  if (station_id && journey_type) {
+    if (journey_type === "dep") {
+      _filterBy["departure_station_id"] = parseInt(station_id);
+    } else {
+      _filterBy["return_station_id"] = parseInt(station_id);
     }
   }
 
   const journeyData = await db.$transaction([
     db.journey.count({
-      where:_filterBy
+      where: _filterBy,
     }),
     db.journey.findMany({
       take: _totalRecords,
       skip: (_page - 1) * _totalRecords,
       orderBy: _orderBy,
-      where:_filterBy
+      where: _filterBy,
     }),
   ]);
 
-
   return {
-    totalRecords:journeyData[0],
-    journey:journeyData[1]
-  }
+    totalRecords: journeyData[0],
+    journey: journeyData[1],
+  };
 };
 
 const getJourneyByStation = async (

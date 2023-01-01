@@ -88,9 +88,6 @@ station.get(
   }
 );
 
-station.post("/station", (req: Request, res: Response) => {
-  
-});
-
+station.post("/station", (req: Request, res: Response) => {});
 
 export default station;
