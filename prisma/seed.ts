@@ -3,18 +3,21 @@ import { join } from "path";
 import db from "../utils/database";
 
 async function seed() {
+
   const stationsDetailsPath = join(process.cwd(), "./files/station-details");
-  const stationDetailsFiles = await fs.readdirSync(stationsDetailsPath);
+  const stationDetailsFiles = fs.readdirSync(stationsDetailsPath);
 
   const journeyDetailsPath = join(process.cwd(), "./files/journey-details");
-  const journeyDetailsFiles = await fs.readdirSync(journeyDetailsPath);
+  const journeyDetailsFiles = fs.readdirSync(journeyDetailsPath);
+
 
   for (const file of stationDetailsFiles) {
-    await db.$queryRawUnsafe(
+    const out = await db.$queryRawUnsafe(
       `COPY "stationDetails" FROM '${
         stationsDetailsPath + "/" + file
       }' csv header`
     );
+
   }
 
   for (const file of journeyDetailsFiles) {
