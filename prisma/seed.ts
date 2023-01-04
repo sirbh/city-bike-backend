@@ -4,30 +4,27 @@ import db from "../utils/database";
 
 async function seed() {
 
-  const stationsDetailsPath = join(process.cwd(), "./files/station-details");
+  const stationsDetailsPath = join("./files/station-details");
   const stationDetailsFiles = fs.readdirSync(stationsDetailsPath);
 
-  const journeyDetailsPath = join(process.cwd(), "./files/journey-details");
+  const journeyDetailsPath = join("./files/journey-details");
   const journeyDetailsFiles = fs.readdirSync(journeyDetailsPath);
 
 
-  for (const file of stationDetailsFiles) {
-    const out = await db.$queryRawUnsafe(
-      `COPY "stationDetails" FROM '${
-        stationsDetailsPath + "/" + file
-      }' csv header`
-    );
+  // for (const file of stationDetailsFiles) {
+  //   console.log(file)
+  //   const out = await db.$queryRawUnsafe(
+  //     `\copy stationDetails from '${join(stationsDetailsPath,file)}' csv header`
+  //   );
 
-  }
+  // }
 
-  for (const file of journeyDetailsFiles) {
-    await db.$queryRawUnsafe(
-      `COPY "journey" ("departure","return","departure_station_id","departure_station_name","return_station_id","return_station_name","covered_distance","duration") FROM '${
-        journeyDetailsPath + "/" + file
-      }' csv header`
-    );
-    console.log(file);
-  }
+  // for (const file of journeyDetailsFiles) {
+  //   await db.$queryRawUnsafe(
+  //     `COPY "journey" ("departure","return","departure_station_id","departure_station_name","return_station_id","return_station_name","covered_distance","duration") from '/files/journey-details/2021-05.csv' csv header`
+  //   );
+  //   console.log(file);
+  // }
 
   const rec = await db.journey.deleteMany({
     where: {
