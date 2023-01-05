@@ -29,7 +29,7 @@ https://github.com/sirbh/city-bike-app
    * <https://dev.hsl.fi/citybikes/od-trips-2021/2021-07.csv>
 3. Create folder ```files/station-details``` in project directory (inside city-bike-backend folder) and add following csv to it.
    * Dataset: <https://opendata.arcgis.com/datasets/726277c507ef4914b0aec3cbcfcbfafc_0.csv>
-4. Run ```docker-compose up``` in the repo
+4. Run ```docker-compose up``` in the repo to run backend
 5. Go to frontend repo: https://github.com/sirbh/city-bike-app and follow steps there to run frontend
 
 ### Without Docker
