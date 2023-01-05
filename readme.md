@@ -25,7 +25,7 @@ https://github.com/sirbh/city-bike-app
 1. Clone the repo using ``` git clone https://github.com/sirbh/city-bike-backend.git```.
 2. Run ```docker-compose up``` in the repo
 3. Go to ```http://localhost:8080/page=1&totalRecords=10&station_id=94&journey_type=dep``` and check if you see json object.
-4. If json object was seen on the above URL that means backend is running fine. Other wise run ```docker system prune``` and again follow steps 1. to 3 or follow without docker instructions.
+4. If json object was seen on the above URL that means backend is running fine. Otherwise run ```docker system prune``` and again follow steps 1. to 3. or follow without docker instructions.
 5. Go to frontend repo: https://github.com/sirbh/city-bike-app and follow steps there to run front end
 
 ### Without Docker
