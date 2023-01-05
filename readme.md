@@ -1,7 +1,7 @@
 # CITY BIKE APP BACKEND
 ## About
 
-This repo serve as backend for the city bike front end. More details about the features can found on the following url:
+This repo serve as backend for the city bike front end. More details about the features can be found on the following url:
 
 https://github.com/sirbh/city-bike-app
 
@@ -11,10 +11,10 @@ https://github.com/sirbh/city-bike-app
 
 ## Tech
 
-NodeJS
-ExpressJS
-PostgreSQL DB
-Prisma ORM
+- NodeJS
+- ExpressJS
+- PostgreSQL DB
+- Prisma ORM
 
 ## How to run?
 
