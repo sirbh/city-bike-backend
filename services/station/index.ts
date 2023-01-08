@@ -57,6 +57,36 @@ const getStationDetails = async (station_id: string) => {
         return_station_id: _station_id,
       },
     }),
+    db.journey.groupBy({
+      by: ["return_station_id", "return_station_name"],
+      _count: {
+        departure_station_id: true,
+      },
+      where: {
+        departure_station_id: _station_id,
+      },
+      orderBy: {
+        _count: {
+          departure_station_id: "desc",
+        },
+      },
+      take: 5,
+    }),
+    db.journey.groupBy({
+      by: ["departure_station_id", "departure_station_name"],
+      _count: {
+        return_station_id: true,
+      },
+      where: {
+        return_station_id: _station_id,
+      },
+      orderBy: {
+        _count: {
+          return_station_id: "desc",
+        },
+      },
+      take: 5,
+    }),
   ]);
 
   return {
@@ -65,6 +95,18 @@ const getStationDetails = async (station_id: string) => {
     total_return: data[2],
     avg_departure_distance: data[3]._avg.covered_distance,
     avg_return_distance: data[4]._avg.covered_distance,
+    popular_return_station: data[5].map((station) => {
+      return {
+        name: station.return_station_name,
+        station_id: station.return_station_id,
+      };
+    }),
+    popular_departure_station: data[6].map((station) => {
+      return {
+        name: station.departure_station_name,
+        station_id: station.departure_station_id,
+      };
+    }),
   };
 };
 
